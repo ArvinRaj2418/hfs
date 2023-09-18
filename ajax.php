@@ -14,8 +14,8 @@ if(isset(['wdvt']['name']) && ['wdvt']['name'] != '') {
     global $conn;
     $wdvt = time() . ['wdvt']['name'];
     $wdvi = time() . ['wdvi']['name'];
-    $table = $_POST['table'];
-    $order_id = $_POST['order_id'];
+    $table = ['table'];
+    $order_id = ['order_id'];
     $order_col = $table === "validations" ? "order_id" : "ppv_order_id";
 
     $query = "SELECT *,o.id as oID, cs.name AS csName, m.name AS mName, hfs.name AS hfsName, bi.name AS biName, ft.name AS ftName FROM orders o ";
@@ -68,7 +68,7 @@ if(isset(['wdvt']['name']) && ['wdvt']['name'] != '') {
 
         $query = "UPDATE $table SET workstream_text = ?, workstream_img = ? WHERE $order_col = ?";
         $stmt = $conn->prepare($query);
-        $res = $stmt->execute([$wdvt, $wdvi, $_POST['order_id']]);
+        $res = $stmt->execute([$wdvt, $wdvi, ['order_id']]);
 
         if($res) {
             echo "success";
@@ -80,10 +80,10 @@ if(isset(['wdvt']['name']) && ['wdvt']['name'] != '') {
     }
 }
 
-if(isset($_POST['validationFiles'])) {
+if(isset(['validationFiles'])) {
     global $conn;
-    $id = $_POST['order_id'];
-    $table = $_POST['table'];
+    $id = ['order_id'];
+    $table = ['table'];
     $order_col = $table === "validations" ? "order_id" : "ppv_order_id";
 
     $query = "SELECT * FROM $table WHERE $order_col = ? LIMIT 1";
@@ -98,7 +98,7 @@ if(isset(['cbt']['name']) && ['cbi']['name'] != '') {
     global $conn;
     $cbt = time() . ['cbt']['name'];
     $cbi = time() . ['cbi']['name'];
-    $table = $_POST['table'];
+    $table = ['table'];
     $order_col = $table === "validations" ? "order_id" : "ppv_order_id";
 
     $location = '../uploads/'.$cbt;
@@ -118,10 +118,10 @@ if(isset(['cbt']['name']) && ['cbi']['name'] != '') {
     }
 }
 
-if(isset($_POST['cbvalidationFiles'])) {
+if(isset(['cbvalidationFiles'])) {
     global $conn;
-    $id = $_POST['order_id'];
-    $table = $_POST['table'];
+    $id = ['order_id'];
+    $table = ['table'];
     $order_col = $table === "validations" ? "order_id" : "ppv_order_id";
 
     $query = "SELECT * FROM $table WHERE $order_col = ? LIMIT 1";
@@ -132,9 +132,9 @@ if(isset($_POST['cbvalidationFiles'])) {
     echo json_encode([$row]);
 }
 
-if(isset($_POST['validation-ppv'])) {
-    $col = $_POST['validation-ppv'];
-    $order_id = $_POST['order_id'];
+if(isset(['validation-ppv'])) {
+    $col = ['validation-ppv'];
+    $order_id = ['order_id'];
 
     $file_name = uniqid() . "-" . ['file']['name'];
     $file_tmp = ['file']['tmp_name'];
@@ -153,9 +153,9 @@ if(isset($_POST['validation-ppv'])) {
     }
 }
 
-if(isset($_POST['opCode'])) {
+if(isset(['opCode'])) {
     global $conn;
-    $opCode = $_POST['opCode'];
+    $opCode = ['opCode'];
 
     $query = "SELECT * FROM search WHERE location_code = ? ;";
     $stmt = $conn->prepare($query);
@@ -165,12 +165,12 @@ if(isset($_POST['opCode'])) {
     echo json_encode($search);
 }
 
-if(isset($_POST['mfs'])) {
+if(isset(['mfs'])) {
     global $conn;
-    $tp = $_POST['tp'];
-    $bt = $_POST['bt'];
-    $ft = $_POST['ft'];
-    $type = $_POST['type'];
+    $tp = ['tp'];
+    $bt = ['bt'];
+    $ft = ['ft'];
+    $type = ['type'];
 
     $query = "SELECT * FROM locations INNER JOIN flow_types ft on locations.flow_type_id = ft.id WHERE capability_standard_id = ? AND bi_type_id = ? AND hvm_flow_id = ? AND type = ? ;";
     $stmt = $conn->prepare($query);
@@ -180,9 +180,9 @@ if(isset($_POST['mfs'])) {
     
 }
 
-if(isset($_POST['pmfs'])) {
+if(isset(['pmfs'])) {
     global $conn;
-    $ppv_flow = $_POST['ppv_flow'];
+    $ppv_flow = ['ppv_flow'];
 
     $query = "SELECT * FROM ppvs WHERE ppv_manufacturing_flow_std_id = ? GROUP BY ppv_type";
     $stmt = $conn->prepare($query);
@@ -191,10 +191,10 @@ if(isset($_POST['pmfs'])) {
     echo json_encode($rows);
 }
 
-if(isset($_POST['pmfs_flow_name'])) {
+if(isset(['pmfs_flow_name'])) {
     global $conn;
-    $ppv_flow = $_POST['ppv_flow'];
-    $ppv_types = $_POST['ppv_types_arr'];
+    $ppv_flow = ['ppv_flow'];
+    $ppv_types = ['ppv_types_arr'];
     $ppv_types = "'" . implode("','", $ppv_types) . "'";
 
     $query = "SELECT * FROM ppvs WHERE ppv_manufacturing_flow_std_id = ? AND ppv_type IN ({$ppv_types}) GROUP BY platform_name";
@@ -218,7 +218,7 @@ if(isset($_POST['pmfs_flow_name'])) {
 //
 //    $query = "UPDATE validations SET rcs = ?, wtl = ? WHERE order_id = ?";
 //    $stmt = $conn->prepare($query);
-//    $res = $stmt->execute([$rcsName, $wtlName, $_POST['order_id']]);
+//    $res = $stmt->execute([$rcsName, $wtlName, ['order_id']]);
 //
 //    if($res) {
 //        echo "success";
@@ -227,9 +227,9 @@ if(isset($_POST['pmfs_flow_name'])) {
 //    }
 //}
 //
-//if(isset($_POST['validationFiles'])) {
+//if(isset(['validationFiles'])) {
 //    global $conn;
-//    $id = $_POST['order_id'];
+//    $id = ['order_id'];
 //
 //    $query = "SELECT * FROM validations WHERE order_id = ?";
 //    $stmt = $conn->prepare($query);
