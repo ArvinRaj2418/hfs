@@ -15,10 +15,10 @@ if(isset($_POST['update'])) {
     $op_types = $_POST['op_types'];
     $flow = $_POST['flow'];
     $flow_id = $_POST['flow_id'];
-     $uploadCheck = isset($_FILES['img']['name']) && !empty($_FILES['img']['name']);
+     $uploadCheck = isset(['img']['name']) && !empty($_FILES['img']['name']);
     if($uploadCheck) {
         $target_dir = "../uploads/";
-        $img_name = $_FILES["img"]["name"];
+        $img_name = ["img"]["name"];
         $target_file = $target_dir . $img_name;
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
