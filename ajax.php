@@ -175,7 +175,6 @@ if(isset($_POST['mfs'])) {
     $query = "SELECT * FROM locations INNER JOIN flow_types ft on locations.flow_type_id = ft.id WHERE capability_standard_id = ? AND bi_type_id = ? AND hvm_flow_id = ? AND type = ? ;";
     $stmt = $conn->prepare($query);
     $stmt->execute([intval($tp), intval($bt), intval($ft), intval($type)]);
-    $rows = $stmt->fetchAll();
 
     echo json_encode($rows);
     
@@ -188,7 +187,6 @@ if(isset($_POST['pmfs'])) {
     $query = "SELECT * FROM ppvs WHERE ppv_manufacturing_flow_std_id = ? GROUP BY ppv_type";
     $stmt = $conn->prepare($query);
     $stmt->execute([$ppv_flow]);
-    $rows = $stmt->fetchAll();
 
     echo json_encode($rows);
 }
@@ -241,22 +239,4 @@ if(isset($_POST['pmfs_flow_name'])) {
 //    echo json_encode($rows);
 //}
 
-if(isset($_POST['imgCol'])) {
-    global $conn;
-    $imgCol = $_POST['imgCol'];
-    $imgName = $_FILES[$imgCol]['name'];
-
-    $location = '../uploads/'.$imgName;
-    move_uploaded_file($_FILES[$imgCol]['tmp_name'], $location);
-
-    $imgCol = str_replace("Admin","", $imgCol);
-    $query = "UPDATE validations SET {$imgCol} = ? WHERE order_id = ?";
-    $stmt = $conn->prepare($query);
-    $res = $stmt->execute([$imgName, $_POST['order_id']]);
-
-    if($res) {
-        echo json_encode(["location" => $location, "img" => $imgName]);
-    } else {
-        echo "error";
-    }
 }
