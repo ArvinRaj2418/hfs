@@ -13,14 +13,14 @@ if(isset($_POST['add']) || isset($_POST['view'])) {
     $type = $_POST['flowPrePost'];
 
     $img_name = null;
-    $uploadCheck = isset($_FILES['img']['name']) && !empty($_FILES['img']['name']);
+    $uploadCheck = isset(['img']['name']) && !empty(['img']['name']);
     if($uploadCheck) {
         $target_dir = "../uploads/";
-        $img_name = $_FILES["img"]["name"];
+        $img_name = ["img"]["name"];
         $target_file = $target_dir . $img_name;
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-        move_uploaded_file($_FILES["img"]["tmp_name"], $target_file);
+        move_uploaded_file(["img"]["tmp_name"], $target_file);
     }
 
     if(isset($_POST['category']) && $_POST['category'] == 1) {
