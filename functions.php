@@ -179,9 +179,6 @@ function findAllByQuery($query) {
 
     $stmt = $conn->prepare($query);
     $stmt->execute();
-    $rows = $stmt->fetchAll();
-
-    return !empty($rows) ? $rows : false;
 }
 
 ?>
