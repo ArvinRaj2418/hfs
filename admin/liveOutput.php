@@ -2,7 +2,7 @@
 
 include_once "includes/header.php";
 
-if(!isset($_GET['id'])) {
+if(!isset(['id'])) {
     redirect("index.php");
 }
 
@@ -12,7 +12,7 @@ $query .= "INNER JOIN bi_types bi ON o.bi_type = bi.id ";
 $query .= "INNER JOIN milestones m ON o.milestone = m.id ";
 $query .= "INNER JOIN hvm_flow_standards hfs ON o.hvm_flow_standard = hfs.id ";
 $query .= "INNER JOIN flow_types ft ON o.flow_type = ft.id ";
-$query .= "WHERE o.id = {$_GET['id']}";
+$query .= "WHERE o.id = {['id']}";
 
 $data = findByQuery($query);
 
@@ -153,7 +153,7 @@ $ppvs = findAllByQuery($query);
 <div class="hidden modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form action="output.php?id=<?php echo $_GET['id'] ?>" method="post">
+            <form action="output.php?id=<?php echo ['id'] ?>" method="post">
                 <div class="modal-header">
                     <h5 class="modal-title" id="emailModalLabel">Send Email</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
