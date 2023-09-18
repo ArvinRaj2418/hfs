@@ -10,10 +10,10 @@ include_once "functions.php";
 global $pdo;
 $conn = $pdo->open();
 
-if(isset($_FILES['wdvt']['name']) && $_FILES['wdvt']['name'] != '') {
+if(isset(['wdvt']['name']) && ['wdvt']['name'] != '') {
     global $conn;
-    $wdvt = time() . $_FILES['wdvt']['name'];
-    $wdvi = time() . $_FILES['wdvi']['name'];
+    $wdvt = time() . ['wdvt']['name'];
+    $wdvi = time() . ['wdvi']['name'];
     $table = $_POST['table'];
     $order_id = $_POST['order_id'];
     $order_col = $table === "validations" ? "order_id" : "ppv_order_id";
@@ -47,7 +47,7 @@ if(isset($_FILES['wdvt']['name']) && $_FILES['wdvt']['name'] != '') {
         }
     }
 
-    $spreadsheet = IOFactory::load($_FILES['wdvt']['tmp_name']);
+    $spreadsheet = IOFactory::load(['wdvt']['tmp_name']);
     $worksheet = $spreadsheet->getActiveSheet();
 
     // Get the highest row number
@@ -61,10 +61,10 @@ if(isset($_FILES['wdvt']['name']) && $_FILES['wdvt']['name'] != '') {
 
     if(json_encode($location_codes) == json_encode($columnAValues)) {
         $location = '../uploads/'.$wdvt;
-        move_uploaded_file($_FILES['wdvt']['tmp_name'], $location);
+        move_uploaded_file(['wdvt']['tmp_name'], $location);
 
         $location = '../uploads/'.$wdvi;
-        move_uploaded_file($_FILES['wdvi']['tmp_name'], $location);
+        move_uploaded_file(['wdvi']['tmp_name'], $location);
 
         $query = "UPDATE $table SET workstream_text = ?, workstream_img = ? WHERE $order_col = ?";
         $stmt = $conn->prepare($query);
@@ -94,18 +94,18 @@ if(isset($_POST['validationFiles'])) {
     echo json_encode([$row]);
 }
 
-if(isset($_FILES['cbt']['name']) && $_FILES['cbi']['name'] != '') {
+if(isset(['cbt']['name']) && ['cbi']['name'] != '') {
     global $conn;
-    $cbt = time() . $_FILES['cbt']['name'];
-    $cbi = time() . $_FILES['cbi']['name'];
+    $cbt = time() . ['cbt']['name'];
+    $cbi = time() . ['cbi']['name'];
     $table = $_POST['table'];
     $order_col = $table === "validations" ? "order_id" : "ppv_order_id";
 
     $location = '../uploads/'.$cbt;
-    move_uploaded_file($_FILES['cbt']['tmp_name'], $location);
+    move_uploaded_file(['cbt']['tmp_name'], $location);
 
     $location = '../uploads/'.$cbi;
-    move_uploaded_file($_FILES['cbi']['tmp_name'], $location);
+    move_uploaded_file(['cbi']['tmp_name'], $location);
 
     $query = "UPDATE $table SET crystalball_text = ?, crystalball_img = ? WHERE $order_col = ?";
     $stmt = $conn->prepare($query);
@@ -136,8 +136,8 @@ if(isset($_POST['validation-ppv'])) {
     $col = $_POST['validation-ppv'];
     $order_id = $_POST['order_id'];
 
-    $file_name = uniqid() . "-" . $_FILES['file']['name'];
-    $file_tmp = $_FILES['file']['tmp_name'];
+    $file_name = uniqid() . "-" . ['file']['name'];
+    $file_tmp = ['file']['tmp_name'];
     if(move_uploaded_file($file_tmp, "../uploads/" . $file_name)) {
         $query = "UPDATE validations_ppv SET {$col} = ? WHERE ppv_order_id = ?";
         $stmt = $conn->prepare($query);
