@@ -51,9 +51,6 @@ if($data->location_order_id != 0) {
 $locations = array_merge($locations, $locations2);
 
 if(isset($_POST['submit'])) {
-    $email = $_POST['email1'];
-    $email2 = $_POST['email2'];
-    $email3 = $_POST['email3'];
     $body = "<p>Product Name</p>
             <h4> $data->product </h4>
             ";
@@ -243,7 +240,6 @@ if(isset($_POST['submit'])) {
 <div class="hidden modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form action="output.php?id=<?php echo $_GET['id'] ?>" method="post">
                 <div class="modal-header">
                     <h5 class="modal-title" id="emailModalLabel">Send Email</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
