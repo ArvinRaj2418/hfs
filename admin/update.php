@@ -15,24 +15,24 @@ if(isset(['update'])) {
     $op_types = ['op_types'];
     $flow = ['flow'];
     $flow_id = ['flow_id'];
-     $uploadCheck = isset($_FILES['img']['name']) && !empty($_FILES['img']['name']);
+     $uploadCheck = isset(['img']['name']) && !empty(['img']['name']);
     if($uploadCheck) {
         $target_dir = "../uploads/";
-        $img_name = time() . '-' . $_FILES["img"]["name"];
+        $img_name = time() . '-' . ["img"]["name"];
         $target_file = $target_dir . $img_name;
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-        move_uploaded_file($_FILES["img"]["tmp_name"], $target_file);
+        move_uploaded_file(["img"]["tmp_name"], $target_file);
     }
 
     if($uploadCheck) {
         $query = "UPDATE locations SET capability_standard_id = ?, hvm_flow_id = ?, img = ? WHERE id = ?";
         $stmt = $conn->prepare($query);
-        $res = $stmt->execute([$capability_id, $hvm_id, $img_name, $_GET['id']]);
+        $res = $stmt->execute([$capability_id, $hvm_id, $img_name, ['id']]);
     } else {
         $query = "UPDATE locations SET capability_standard_id = ?, hvm_flow_id = ? WHERE id = ?";
         $stmt = $conn->prepare($query);
-        $res = $stmt->execute([$capability_id, $hvm_id, $_GET['id']]);
+        $res = $stmt->execute([$capability_id, $hvm_id, ['id']]);
     }
 
     $query = "UPDATE flow_types SET name = ? WHERE id = ?";
@@ -42,7 +42,7 @@ if(isset(['update'])) {
     foreach ($columns as $key => $column) {
         $query = "UPDATE locations_data SET location_code = ?, opname = ?, optype = ? WHERE column_id = ? AND location_id = ?";
         $stmt = $conn->prepare($query);
-        $res = $stmt->execute([$location_codes[$key], $op_names[$key], $op_types[$key], $column, $_GET['id']]);
+        $res = $stmt->execute([$location_codes[$key], $op_names[$key], $op_types[$key], $column, ['id']]);
     }
 
     $message = "<p class='alert alert-success'>Updated successfully!</p>";
@@ -52,7 +52,7 @@ $query = "SELECT *,l.id As lId,cs.name AS csName, ft.name AS ftName, hfs.name AS
 $query .= "INNER JOIN capability_standards cs ON l.capability_standard_id = cs.id ";
 $query .= "INNER JOIN hvm_flow_standards hfs ON l.hvm_flow_id = hfs.id ";
 $query .= "INNER JOIN flow_types ft ON l.flow_type_id = ft.id ";
-$query .= "WHERE l.id = {$_GET['id']}";
+$query .= "WHERE l.id = {['id']}";
 
 $location = findByQuery($query);
 
@@ -76,7 +76,7 @@ $columns = findAll('columns');
             </div>
             <div class="box shadow">
                 <?php echo isset($message) ? $message : '' ?>
-                <form id="form-location" action="update.php?id=<?php echo $_GET['id'] ?>" class="row" method="post" enctype="multipart/form-data">
+                <form id="form-location" action="update.php?id=<?php ['id'] ?>" class="row" method="post" enctype="multipart/form-data">
                     <div class="col-lg-12">
                         <p class="f-14 mb-0 pb-0 w-500">Class Tester Platform</p>
                         <select class="form-select mb-3" name="capability" id="">

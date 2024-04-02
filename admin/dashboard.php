@@ -3,12 +3,12 @@
 include_once "includes/header.php";
 
 $page = 0;
-$perPage = 100;
+$perPage = 6;
 
 if(isset($_GET['id'])) {
     $query = "DELETE FROM orders WHERE id = ?";
     $stmt = $conn->prepare($query);
-    $res = $stmt->execute([$_GET['id']]);
+    $res = $stmt->execute([['id']]);
 }
 
 if(isset($_GET['page'])) {

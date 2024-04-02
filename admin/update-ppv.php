@@ -2,7 +2,7 @@
 
 include_once ('includes/header.php');
 
-if(!isset($_GET['id'])) {
+if(!isset(['id'])) {
     redirect("index.php");
 }
 
@@ -15,30 +15,30 @@ if(isset(['update'])) {
     $location_codes = ['location_codes'];
     $op_names = ['op_names'];
     $op_types = ['op_types'];
-     $uploadCheck = isset($_FILES['img']['name']) && !empty($_FILES['img']['name']);
+     $uploadCheck = isset(['img']['name']) && !empty(['img']['name']);
     if($uploadCheck) {
         $target_dir = "../uploads/";
-        $img_name = time() . '-' . $_FILES["img"]["name"];
+        $img_name = time() . '-' . ["img"]["name"];
         $target_file = $target_dir . $img_name;
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-        move_uploaded_file($_FILES["img"]["tmp_name"], $target_file);
+        move_uploaded_file(["img"]["tmp_name"], $target_file);
     }
 
     if($uploadCheck) {
         $query = "UPDATE ppvs SET ppv_manufacturing_flow_std_id = ?, ppv_type = ?, platform_name = ?, img = ? WHERE id = ?";
         $stmt = $conn->prepare($query);
-        $res = $stmt->execute([$ppv_manufacturing_flow_std_id, $ppv_type, $platform_name, $img_name, $_GET['id']]);
+        $res = $stmt->execute([$ppv_manufacturing_flow_std_id, $ppv_type, $platform_name, $img_name, ['id']]);
     } else {
         $query = "UPDATE ppvs SET ppv_manufacturing_flow_std_id = ?, ppv_type = ?, platform_name = ? WHERE id = ?";
         $stmt = $conn->prepare($query);
-        $res = $stmt->execute([$ppv_manufacturing_flow_std_id, $ppv_type, $platform_name, $_GET['id']]);
+        $res = $stmt->execute([$ppv_manufacturing_flow_std_id, $ppv_type, $platform_name, ['id']]);
     }
 
     foreach ($columns as $key => $column) {
         $query = "UPDATE ppv_data SET location_code = ?, opname = ?, optype = ? WHERE column_id = ? AND ppv_id = ?";
         $stmt = $conn->prepare($query);
-        $res = $stmt->execute([$location_codes[$key], $op_names[$key], $op_types[$key], $column, $_GET['id']]);
+        $res = $stmt->execute([$location_codes[$key], $op_names[$key], $op_types[$key], $column, ['id']]);
     }
 
     $message = "<p class='alert alert-success'>Updated successfully!</p>";
@@ -46,7 +46,7 @@ if(isset(['update'])) {
 
 $query = "SELECT *, ppvs.id AS pid, pmfs.id AS pmfsid FROM ppvs";
 $query .= " INNER JOIN ppv_manufacturing_flow_std pmfs on ppvs.ppv_manufacturing_flow_std_id = pmfs.id";
-$query .= " WHERE ppvs.id = {$_GET['id']}";
+$query .= " WHERE ppvs.id = {['id']}";
 
 $ppv = findByQuery($query);
 

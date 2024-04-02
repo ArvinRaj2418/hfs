@@ -3,9 +3,9 @@
 include_once ('includes/header.php');
 
 if(isset($_POST['add']) || isset($_POST['view'])) {
-    $location_code = $_POST['location_code'];
-    $optype = $_POST['optype'];
-    $desc = $_POST['desc'];
+    $location_code = ['location_code'];
+    $optype = ['optype'];
+    $desc = ['desc'];
 
     $query = "INSERT INTO search(location_code, optype, description) VALUES (?,?,?)";
     $stmt = $conn->prepare($query);

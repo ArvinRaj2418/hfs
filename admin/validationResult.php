@@ -7,11 +7,11 @@ if(isset($_GET['logout'])) {
     redirect('../signin.php');
 }
 
-if(isset($_GET['a']) && isset($_GET['id'])) {
-    $imgCol = $_GET['col'];
+if(isset(['a']) && isset(['id'])) {
+    $imgCol = ['col'];
     $query = "UPDATE validations SET {$imgCol} = NULL WHERE order_id = ?";
     $stmt = $conn->prepare($query);
-    $res = $stmt->execute([$_GET['id']]);
+    $res = $stmt->execute([['id']]);
     redirect("validationResult.php");
 }
 
@@ -146,3 +146,46 @@ $validations = findAllByQuery($query);
 include_once "includes/footer.php";
 
 ?>
+
+<script>
+    $('.custom-file-input').on('change', function () {
+        var that = $(this)
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var fileType = e.target.result.split('/')[0];
+                if(fileType.includes("image")) {
+                    that.closest('td').find('img').attr('src', e.target.result);
+                }
+
+            }
+
+            reader.readAsDataURL(this.files[0]);
+
+            var formData = new FormData(that.closest('form')[0])
+            console.log(that.closest('form')[0])
+            $.ajax({
+                method: 'post',
+                url: '../includes/ajax.php',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {
+                    response = JSON.parse(response)
+                    that.closest('td').find('.fileLink').attr('href', response.location);
+                    that.closest('td').find('.fileLink').text(response.img);
+                }
+            })
+        }
+    })
+
+
+    // Zoom Image
+    $('.img-fluid').click(function () {
+        $('#imgZoomModal').modal('show')
+        console.log( $(this).prop('src'))
+        $('#imageZoom').attr('src', $(this).prop('src'))
+    })
+</script>

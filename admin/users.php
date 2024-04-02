@@ -5,7 +5,7 @@ include_once "includes/header.php";
 if(isset($_GET['a']) && isset($_GET['id'])) {
     $query = "DELETE FROM users WHERE id = ?";
     $stmt = $conn->prepare($query);
-    $res = $stmt->execute([$_GET['id']]);
+    $res = $stmt->execute([['id']]);
     if($res) {
         redirect("users.php");
     }

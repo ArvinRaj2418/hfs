@@ -14,12 +14,12 @@ if(isset(['update'])) {
 
         $query .= ', pass = ? WHERE id = ?';
         $stmt = $conn->prepare($query);
-        $res = $stmt->execute([$name, $email, $email2, $crypt_pass, $_GET['id']]);
+        $res = $stmt->execute([$name, $email, $email2, $crypt_pass, ['id']]);
     } else {
         $query .= " WHERE id = ?";
 
         $stmt = $conn->prepare($query);
-        $res = $stmt->execute([$name, $email, $email2, $_GET['id']]);
+        $res = $stmt->execute([$name, $email, $email2, ['id']]);
     }
 
     if($res) {
@@ -31,8 +31,8 @@ if(isset(['update'])) {
 
 $query = 'SELECT * FROM users WHERE id = ?';
 $stmt = $conn->prepare($query);
-$stmt->execute([$_GET['id']]);
-$user = $stmt->fetch();
+$stmt->execute([['id']]);
+$user = $stmt;
 ?>
 
 <main class="content">
@@ -43,7 +43,7 @@ $user = $stmt->fetch();
             </div>
             <div class="box shadow">
                 <?php echo isset($message) ? $message : '' ?>
-                <form class="row" method="post" action="updateUser.php?id=<?php echo $_GET['id'] ?>" enctype="multipart/form-data">
+                <form class="row" method="post" action="updateUser.php?id=<?php ['id'] ?>" enctype="multipart/form-data">
                     <div class="col-lg-6">
                         <p class="f-16 mb-0 pb-0 w-600 mt-2">Name</p>
                         <input type="text" name="name" value="<?php echo $user->name ?>" required class="sign-input w-100 mb-3" placeholder="Name ">

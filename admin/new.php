@@ -5,28 +5,28 @@ include_once ('includes/header.php');
 if(isset($_POST['add']) || isset($_POST['view'])) {
 //    var_dump($_POST);
 //    die();
-    $columns = $_POST['columns'];
-    $location_codes = $_POST['location_codes'];
-    $op_names = $_POST['op_names'];
-    $op_types = $_POST['op_types'];
+    $columns = ['columns'];
+    $location_codes = ['location_codes'];
+    $op_names = ['op_names'];
+    $op_types = ['op_types'];
     $flow_id = 0;
-    $type = $_POST['flowPrePost'];
+    $type = ['flowPrePost'];
 
     $img_name = null;
-    $uploadCheck = isset(['img']['name']) && !empty(['img']['name']);
+    $uploadCheck = isset($_FILES['img']['name']) && !empty($_FILES['img']['name']);
     if($uploadCheck) {
         $target_dir = "../uploads/";
-        $img_name = ["img"]["name"];
+        $img_name = time() . '-' . $_FILES["img"]["name"];
         $target_file = $target_dir . $img_name;
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-        move_uploaded_file(["img"]["tmp_name"], $target_file);
+        move_uploaded_file($_FILES["img"]["tmp_name"], $target_file);
     }
 
-    if(isset($_POST['category']) && $_POST['category'] == 1) {
-        $ppv_manufacturing_flow_std_id = $_POST['ppv_flow'];
-        $ppv_type = $_POST['ppv_type'];
-        $platform_name = $_POST['platform_name'];
+    if(isset(['category']) && ['category'] == 1) {
+        $ppv_manufacturing_flow_std_id = ['ppv_flow'];
+        $ppv_type = ['ppv_type'];
+        $platform_name = ['platform_name'];
 
         $query = "INSERT INTO ppvs (ppv_tester_platform_id, ppv_manufacturing_flow_std_id, ppv_type, platform_name, img) VALUES (?,?,?,?,?)";
         $stmt = $conn->prepare($query);
@@ -52,10 +52,10 @@ if(isset($_POST['add']) || isset($_POST['view'])) {
             }
         }
     } else {
-        $capability_id = $_POST['capability'];
-        $bi_id = $_POST['bi'];
-        $hvm_id = $_POST['hvm'];
-        $flow = $_POST['flow'];
+        $capability_id = ['capability'];
+        $bi_id = ['bi'];
+        $hvm_id = ['hvm'];
+        $flow = ['flow'];
 
         $flowData = findByQuery("SELECT * FROM flow_types WHERE name = '{$flow}'");
         if(empty($flowData)) {
