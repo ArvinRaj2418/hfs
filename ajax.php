@@ -10,12 +10,12 @@ include_once "functions.php";
 global $pdo;
 $conn = $pdo->open();
 
-if(isset(['wdvt']['name']) && ['wdvt']['name'] != '') {
+if(isset($_FILES['wdvt']['name']) && $_FILES['wdvt']['name'] != '') {
     global $conn;
-    $wdvt = time() . ['wdvt']['name'];
-    $wdvi = time() . ['wdvi']['name'];
-    $table = ['table'];
-    $order_id = ['order_id'];
+    $wdvt = time() . $_FILES['wdvt']['name'];
+    $wdvi = time() . $_FILES['wdvi']['name'];
+    $table = $_POST['table'];
+    $order_id = $_POST['order_id'];
     $order_col = $table === "validations" ? "order_id" : "ppv_order_id";
 
     $query = "SELECT *,o.id as oID, cs.name AS csName, m.name AS mName, hfs.name AS hfsName, bi.name AS biName, ft.name AS ftName FROM orders o ";
@@ -47,7 +47,7 @@ if(isset(['wdvt']['name']) && ['wdvt']['name'] != '') {
         }
     }
 
-    $spreadsheet = IOFactory::load(['wdvt']['tmp_name']);
+    $spreadsheet = IOFactory::load($_FILES['wdvt']['tmp_name']);
     $worksheet = $spreadsheet->getActiveSheet();
 
     // Get the highest row number
@@ -61,14 +61,14 @@ if(isset(['wdvt']['name']) && ['wdvt']['name'] != '') {
 
     if(json_encode($location_codes) == json_encode($columnAValues)) {
         $location = '../uploads/'.$wdvt;
-        move_uploaded_file(['wdvt']['tmp_name'], $location);
+        move_uploaded_file($_FILES['wdvt']['tmp_name'], $location);
 
         $location = '../uploads/'.$wdvi;
-        move_uploaded_file(['wdvi']['tmp_name'], $location);
+        move_uploaded_file($_FILES['wdvi']['tmp_name'], $location);
 
         $query = "UPDATE $table SET workstream_text = ?, workstream_img = ? WHERE $order_col = ?";
         $stmt = $conn->prepare($query);
-        $res = $stmt->execute([$wdvt, $wdvi, ['order_id']]);
+        $res = $stmt->execute([$wdvt, $wdvi, $_POST['order_id']]);
 
         if($res) {
             echo "success";
@@ -80,10 +80,10 @@ if(isset(['wdvt']['name']) && ['wdvt']['name'] != '') {
     }
 }
 
-if(isset(['validationFiles'])) {
+if(isset($_POST['validationFiles'])) {
     global $conn;
-    $id = ['order_id'];
-    $table = ['table'];
+    $id = $_POST['order_id'];
+    $table = $_POST['table'];
     $order_col = $table === "validations" ? "order_id" : "ppv_order_id";
 
     $query = "SELECT * FROM $table WHERE $order_col = ? LIMIT 1";
@@ -94,22 +94,22 @@ if(isset(['validationFiles'])) {
     echo json_encode([$row]);
 }
 
-if(isset(['cbt']['name']) && ['cbi']['name'] != '') {
+if(isset($_FILES['cbt']['name']) && $_FILES['cbi']['name'] != '') {
     global $conn;
-    $cbt = time() . ['cbt']['name'];
-    $cbi = time() . ['cbi']['name'];
-    $table = ['table'];
+    $cbt = time() . $_FILES['cbt']['name'];
+    $cbi = time() . $_FILES['cbi']['name'];
+    $table = $_POST['table'];
     $order_col = $table === "validations" ? "order_id" : "ppv_order_id";
 
     $location = '../uploads/'.$cbt;
-    move_uploaded_file(['cbt']['tmp_name'], $location);
+    move_uploaded_file($_FILES['cbt']['tmp_name'], $location);
 
     $location = '../uploads/'.$cbi;
-    move_uploaded_file(['cbi']['tmp_name'], $location);
+    move_uploaded_file($_FILES['cbi']['tmp_name'], $location);
 
     $query = "UPDATE $table SET crystalball_text = ?, crystalball_img = ? WHERE $order_col = ?";
     $stmt = $conn->prepare($query);
-    $res = $stmt->execute([$cbt, $cbi, $_POST['order_id']]);
+    $res = $stmt->execute([$cbt, $cbi, ['order_id']]);
 
     if($res) {
         echo "success";
@@ -118,10 +118,10 @@ if(isset(['cbt']['name']) && ['cbi']['name'] != '') {
     }
 }
 
-if(isset(['cbvalidationFiles'])) {
+if(isset($_POST['cbvalidationFiles'])) {
     global $conn;
-    $id = ['order_id'];
-    $table = ['table'];
+    $id = $_POST['order_id'];
+    $table = $_POST['table'];
     $order_col = $table === "validations" ? "order_id" : "ppv_order_id";
 
     $query = "SELECT * FROM $table WHERE $order_col = ? LIMIT 1";
@@ -132,12 +132,12 @@ if(isset(['cbvalidationFiles'])) {
     echo json_encode([$row]);
 }
 
-if(isset(['validation-ppv'])) {
-    $col = ['validation-ppv'];
-    $order_id = ['order_id'];
+if(isset($_POST['validation-ppv'])) {
+    $col = $_POST['validation-ppv'];
+    $order_id = $_POST['order_id'];
 
-    $file_name = uniqid() . "-" . ['file']['name'];
-    $file_tmp = ['file']['tmp_name'];
+    $file_name = uniqid() . "-" . $_FILES['file']['name'];
+    $file_tmp = $_FILES['file']['tmp_name'];
     if(move_uploaded_file($file_tmp, "../uploads/" . $file_name)) {
         $query = "UPDATE validations_ppv SET {$col} = ? WHERE ppv_order_id = ?";
         $stmt = $conn->prepare($query);
@@ -153,9 +153,9 @@ if(isset(['validation-ppv'])) {
     }
 }
 
-if(isset(['opCode'])) {
+if(isset($_POST['opCode'])) {
     global $conn;
-    $opCode = ['opCode'];
+    $opCode = $_POST['opCode'];
 
     $query = "SELECT * FROM search WHERE location_code = ? ;";
     $stmt = $conn->prepare($query);
@@ -165,36 +165,38 @@ if(isset(['opCode'])) {
     echo json_encode($search);
 }
 
-if(isset(['mfs'])) {
+if(isset($_POST['mfs'])) {
     global $conn;
-    $tp = ['tp'];
-    $bt = ['bt'];
-    $ft = ['ft'];
-    $type = ['type'];
+    $tp = $_POST['tp'];
+    $bt = $_POST['bt'];
+    $ft = $_POST['ft'];
+    $type = $_POST['type'];
 
     $query = "SELECT * FROM locations INNER JOIN flow_types ft on locations.flow_type_id = ft.id WHERE capability_standard_id = ? AND bi_type_id = ? AND hvm_flow_id = ? AND type = ? ;";
     $stmt = $conn->prepare($query);
     $stmt->execute([intval($tp), intval($bt), intval($ft), intval($type)]);
+    $rows = $stmt->fetchAll();
 
     echo json_encode($rows);
     
 }
 
-if(isset(['pmfs'])) {
+if(isset($_POST['pmfs'])) {
     global $conn;
-    $ppv_flow = ['ppv_flow'];
+    $ppv_flow = $_POST['ppv_flow'];
 
     $query = "SELECT * FROM ppvs WHERE ppv_manufacturing_flow_std_id = ? GROUP BY ppv_type";
     $stmt = $conn->prepare($query);
     $stmt->execute([$ppv_flow]);
+    $rows = $stmt->fetchAll();
 
     echo json_encode($rows);
 }
 
-if(isset(['pmfs_flow_name'])) {
+if(isset($_POST['pmfs_flow_name'])) {
     global $conn;
-    $ppv_flow = ['ppv_flow'];
-    $ppv_types = ['ppv_types_arr'];
+    $ppv_flow = $_POST['ppv_flow'];
+    $ppv_types = $_POST['ppv_types_arr'];
     $ppv_types = "'" . implode("','", $ppv_types) . "'";
 
     $query = "SELECT * FROM ppvs WHERE ppv_manufacturing_flow_std_id = ? AND ppv_type IN ({$ppv_types}) GROUP BY platform_name";
@@ -218,7 +220,7 @@ if(isset(['pmfs_flow_name'])) {
 //
 //    $query = "UPDATE validations SET rcs = ?, wtl = ? WHERE order_id = ?";
 //    $stmt = $conn->prepare($query);
-//    $res = $stmt->execute([$rcsName, $wtlName, ['order_id']]);
+//    $res = $stmt->execute([$rcsName, $wtlName, $_POST['order_id']]);
 //
 //    if($res) {
 //        echo "success";
@@ -227,9 +229,9 @@ if(isset(['pmfs_flow_name'])) {
 //    }
 //}
 //
-//if(isset(['validationFiles'])) {
+//if(isset($_POST['validationFiles'])) {
 //    global $conn;
-//    $id = ['order_id'];
+//    $id = $_POST['order_id'];
 //
 //    $query = "SELECT * FROM validations WHERE order_id = ?";
 //    $stmt = $conn->prepare($query);
@@ -239,4 +241,22 @@ if(isset(['pmfs_flow_name'])) {
 //    echo json_encode($rows);
 //}
 
+if(isset($_POST['imgCol'])) {
+    global $conn;
+    $imgCol = $_POST['imgCol'];
+    $imgName = time() . $_FILES[$imgCol]['name'];
+
+    $location = '../uploads/'.$imgName;
+    move_uploaded_file($_FILES[$imgCol]['tmp_name'], $location);
+
+    $imgCol = str_replace("Admin","", $imgCol);
+    $query = "UPDATE validations SET {$imgCol} = ? WHERE order_id = ?";
+    $stmt = $conn->prepare($query);
+    $res = $stmt->execute([$imgName, $_POST['order_id']]);
+
+    if($res) {
+        echo json_encode(["location" => $location, "img" => $imgName]);
+    } else {
+        echo "error";
+    }
 }
