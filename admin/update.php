@@ -6,23 +6,23 @@ if(!isset($_GET['id'])) {
     redirect("index.php");
 }
 
-if(isset($_POST['update'])) {
-    $capability_id = $_POST['capability'];
-    $hvm_id = $_POST['hvm'];
-    $columns = $_POST['columns'];
-    $location_codes = $_POST['location_codes'];
-    $op_names = $_POST['op_names'];
-    $op_types = $_POST['op_types'];
-    $flow = $_POST['flow'];
-    $flow_id = $_POST['flow_id'];
-     $uploadCheck = isset(['img']['name']) && !empty(['img']['name']);
+if(isset(['update'])) {
+    $capability_id = ['capability'];
+    $hvm_id = ['hvm'];
+    $columns = ['columns'];
+    $location_codes = ['location_codes'];
+    $op_names = ['op_names'];
+    $op_types = ['op_types'];
+    $flow = ['flow'];
+    $flow_id = ['flow_id'];
+     $uploadCheck = isset($_FILES['img']['name']) && !empty($_FILES['img']['name']);
     if($uploadCheck) {
         $target_dir = "../uploads/";
-        $img_name = ["img"]["name"];
+        $img_name = time() . '-' . $_FILES["img"]["name"];
         $target_file = $target_dir . $img_name;
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-        move_uploaded_file(["img"]["tmp_name"], $target_file);
+        move_uploaded_file($_FILES["img"]["tmp_name"], $target_file);
     }
 
     if($uploadCheck) {
@@ -76,7 +76,7 @@ $columns = findAll('columns');
             </div>
             <div class="box shadow">
                 <?php echo isset($message) ? $message : '' ?>
-                <form id="form-location" action="update.php" class="row" method="post" enctype="multipart/form-data">
+                <form id="form-location" action="update.php?id=<?php echo $_GET['id'] ?>" class="row" method="post" enctype="multipart/form-data">
                     <div class="col-lg-12">
                         <p class="f-14 mb-0 pb-0 w-500">Class Tester Platform</p>
                         <select class="form-select mb-3" name="capability" id="">

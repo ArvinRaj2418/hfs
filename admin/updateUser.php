@@ -2,15 +2,15 @@
 
 include_once ('includes/header.php');
 
-if(isset($_POST['update'])) {
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $email2 = !empty($_POST['email2']) ? $_POST['email2'] : null;
+if(isset(['update'])) {
+    $name = ['name'];
+    $email = ['email'];
+    $email2 = !empty(['email2']) ? ['email2'] : null;
 
     $query = 'UPDATE users SET name = ?, email = ?, email2 = ?';
 
-    if(!empty($_POST['password'])) {
-        $crypt_pass = password_hash($_POST['password'], PASSWORD_BCRYPT);
+    if(!empty(['password'])) {
+        $crypt_pass = password_hash(['password'], PASSWORD_BCRYPT);
 
         $query .= ', pass = ? WHERE id = ?';
         $stmt = $conn->prepare($query);
@@ -32,6 +32,7 @@ if(isset($_POST['update'])) {
 $query = 'SELECT * FROM users WHERE id = ?';
 $stmt = $conn->prepare($query);
 $stmt->execute([$_GET['id']]);
+$user = $stmt->fetch();
 ?>
 
 <main class="content">
@@ -42,10 +43,10 @@ $stmt->execute([$_GET['id']]);
             </div>
             <div class="box shadow">
                 <?php echo isset($message) ? $message : '' ?>
-                <form class="row" method="post" action="updateUser.php" enctype="multipart/form-data">
+                <form class="row" method="post" action="updateUser.php?id=<?php echo $_GET['id'] ?>" enctype="multipart/form-data">
                     <div class="col-lg-6">
                         <p class="f-16 mb-0 pb-0 w-600 mt-2">Name</p>
-                        <input type="text" name="name" required class="sign-input w-100 mb-3" placeholder="Name ">
+                        <input type="text" name="name" value="<?php echo $user->name ?>" required class="sign-input w-100 mb-3" placeholder="Name ">
                     </div>
                     <div class="col-lg-6">
                         <p class="f-16 mb-0 pb-0 w-600 mt-2">Email</p>
