@@ -33,7 +33,7 @@ if(isset(['update'])) {
 $query = 'SELECT * FROM users WHERE id = ?';
 $stmt = $conn->prepare($query);
 $stmt->execute([$_SESSION['admin']->id]);
-$user = $stmt->fetch();
+$user = $stmt;
 ?>
 
 <main class="content">

@@ -13,7 +13,7 @@ if(isset(['update'])) {
 
     $query = "UPDATE search SET location_code = ?, optype = ?, description = ? WHERE id = ?";
     $stmt = $conn->prepare($query);
-    $res = $stmt->execute([$location_code, $optype, $desc, $_GET['id']]);
+    $res = $stmt->execute([$location_code, $optype, $desc, ['id']]);
 
     if($res) {
         $message = "<p class='alert alert-success'>Updated successfully!</p>";
